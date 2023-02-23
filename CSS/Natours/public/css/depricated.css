@@ -1,0 +1,208 @@
+/*
+/*
+COLORS:
+
+Light green: #7ed56f
+Medium green: #55c57a
+Dark green: #28b485
+
+*/
+
+/* Using rem measure allows the changing of unit size dynamically and more efficiently
+   because rem is dependent on global font-size.
+
+   B | block
+   E | element
+   M | modifier
+*/
+
+*,
+*::after,  /* all :after and :before elements */
+*::before {  /* "universal selector" resets the webpage to ensure standard settings */
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;  /* is not inherited by default, but now inherits from body */
+}
+
+html {
+    font-size: 62.5%;  /* Global font-size that rem is dependent on. 1rem == 10px.
+                          % is used instead of px so user can change default font-size */
+}
+
+body { /* attributes in here allow for inheritance (unlike uni. selector) */
+    font-family: "Lato", sans-serif;
+    font-weight: 400;
+    /* font-size: 16px; */
+    line-height: 1.7; /* 1.7 times bigger than default */
+    color: #777;
+    padding: 3rem;
+
+    box-sizing: border-box;  /* without this borders and paddings are added to height/width of ele */
+}
+
+.header {
+    height: 95vh; /* sets header the size of 95% of viewport height */
+    background-image: linear-gradient(
+        to right bottom, 
+        rgba(126, 213, 111, 0.8), 
+        rgba(40, 180, 131, 0.8)), 
+    url('../img/hero.jpg');
+    background-size: cover;  /* will try to fit background width to viewport */
+    background-position: top;  /* bg img will always stay at top */
+    position: relative;
+
+    clip-path: polygon(0 0, 100% 0, 100% 75vh, 0 100%);
+    
+}
+
+.header__logo-box {
+    position: absolute;
+    top: 4rem;
+    left: 4rem;
+}
+
+.header__logo {
+    height: 3.5rem;
+}
+
+.header__text-box {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);  /* moves point where box starts measure to center and not right top corner */
+    text-align: center;
+}
+
+.heading-primary {
+    color: #fff;
+    text-transform: uppercase;
+
+    backface-visibility: hidden;  /* fixes the shaky end of animation (bug) */
+    margin-bottom: 6rem;
+}
+
+.heading-primary--main {
+    display: block;
+    font-size: 6rem;
+    font-weight: 400;
+    letter-spacing: 3.5rem;
+
+    animation-name: moveInLeft;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    /* animation-iteration-count: 3; */
+    /* animation-delay: 3s; */
+}
+
+.heading-primary--sub {
+    display: block;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: 1.75rem;
+
+    animation: moveInRight 1s ease-out;
+}
+
+@keyframes moveInLeft {
+    0% {  /* START */
+        opacity: 0;
+        transform: translateX(-10rem);
+        /* transform: translateX(-100px) rotate(0deg); */
+    }
+
+    /* 50% {
+        transform: rotate(180deg);
+    } */
+
+    80% {
+        transform: translateX(1rem);
+    }
+
+    100% {  /* FINISH */
+        opacity: 1;
+        transform: translate(0);  /* back to normal */
+    }
+}
+
+@keyframes moveInRight {
+    0% {  /* START */
+        opacity: 0;
+        transform: translateX(10rem);
+    }
+
+    80% {
+        transform: translateX(-1rem);
+    }
+
+    100% {  /* FINISH */
+        opacity: 1;
+        transform: translate(0);  /* back to normal */
+    }
+}
+
+@keyframes moveInButton {
+    0% {  /* START */
+        opacity: 0;
+        transform: translateY(3rem);
+    }
+
+    100% {  /* FINISH */
+        opacity: 1;
+        transform: translate(0);  /* back to normal */
+    }
+}
+
+.btn:link,  /* : denotes pseudo class, class that it has under certain conditions */
+.btn:visited {  
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 1.5rem 4rem;
+    display: inline-block;
+    border-radius: 10rem;
+    transition: all .2s;  /* allows transform to have animations */
+    position: relative;
+    font-size: 1.6rem;
+}
+
+.btn:hover {
+    transform: translateY(-.3rem);
+    box-shadow: 0 1rem 2rem rgba(0,0,0,.2);  /* offset x, offset y, blur, color */
+}
+
+.btn:active {
+    transform: translateY(-.1rem);
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.2);
+}
+
+.btn--white {
+    background-color: #fff;
+    color: #777;
+}
+
+.btn::after {  /* ::after creates a psuedo element with the element with .btn class */
+    content: "";  /* REQUIRED */
+    display: inline-block;  /* REQUIRED */
+    height: 100%;
+    width: 100%;
+    border-radius: 10rem;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    transition: all .4s;
+}
+
+.btn--white::after {
+    background-color: #fff;
+}
+
+.btn:hover::after {
+    transform: scaleX(1.4) scaleY(1.6);
+    opacity: 0;
+}
+
+.btn--animated {
+    animation: moveInButton .5s ease-out .75s;  /* .5: duration, .75s: delay */
+    animation-fill-mode: backwards;  /* applies keyframe 0% before animation starts */
+}
+

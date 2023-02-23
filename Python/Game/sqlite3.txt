@@ -1,0 +1,152 @@
+Last login: Sat Jul 20 10:41:43 on ttys000
+(base) Isaacs-MacBook-Pro:~ isaachunter$ sqlite3
+SQLite version 3.27.2 2019-02-25 16:06:06
+Enter ".help" for usage hints.
+Connected to a transient in-memory database.
+Use ".open FILENAME" to reopen on a persistent database.
+sqlite> .quit
+(base) Isaacs-MacBook-Pro:~ isaachunter$ sqlite3 test.db
+SQLite version 3.27.2 2019-02-25 16:06:06
+Enter ".help" for usage hints.
+sqlite> .help
+.archive ...             Manage SQL archives
+.auth ON|OFF             Show authorizer callbacks
+.backup ?DB? FILE        Backup DB (default "main") to FILE
+.bail on|off             Stop after hitting an error.  Default OFF
+.binary on|off           Turn binary output on or off.  Default OFF
+.cd DIRECTORY            Change the working directory to DIRECTORY
+.changes on|off          Show number of rows changed by SQL
+.check GLOB              Fail if output since .testcase does not match
+.clone NEWDB             Clone data into NEWDB from the existing database
+.databases               List names and files of attached databases
+.dbconfig ?op? ?val?     List or change sqlite3_db_config() options
+.dbinfo ?DB?             Show status information about the database
+.dump ?TABLE? ...        Render all database content as SQL
+.echo on|off             Turn command echo on or off
+.eqp on|off|full|...     Enable or disable automatic EXPLAIN QUERY PLAN
+.excel                   Display the output of next command in a spreadsheet
+.exit ?CODE?             Exit this program with return-code CODE
+.expert                  EXPERIMENTAL. Suggest indexes for specified queries
+.fullschema ?--indent?   Show schema and the content of sqlite_stat tables
+.headers on|off          Turn display of headers on or off
+.help ?-all? ?PATTERN?   Show help text for PATTERN
+.import FILE TABLE       Import data from FILE into TABLE
+.imposter INDEX TABLE    Create imposter table TABLE on index INDEX
+.indexes ?TABLE?         Show names of indexes
+.limit ?LIMIT? ?VAL?     Display or change the value of an SQLITE_LIMIT
+.lint OPTIONS            Report potential schema issues.
+.load FILE ?ENTRY?       Load an extension library
+.log FILE|off            Turn logging on or off.  FILE can be stderr/stdout
+.mode MODE ?TABLE?       Set output mode
+.nullvalue STRING        Use STRING in place of NULL values
+.once (-e|-x|FILE)       Output for the next SQL command only to FILE
+.open ?OPTIONS? ?FILE?   Close existing database and reopen FILE
+.output ?FILE?           Send output to FILE or stdout if FILE is omitted
+.print STRING...         Print literal STRING
+.progress N              Invoke progress handler after every N opcodes
+.prompt MAIN CONTINUE    Replace the standard prompts
+.quit                    Exit this program
+.read FILE               Read input from FILE
+.restore ?DB? FILE       Restore content of DB (default "main") from FILE
+.save FILE               Write in-memory database into FILE
+.scanstats on|off        Turn sqlite3_stmt_scanstatus() metrics on or off
+.schema ?PATTERN?        Show the CREATE statements matching PATTERN
+.selftest ?OPTIONS?      Run tests defined in the SELFTEST table
+.separator COL ?ROW?     Change the column and row separators
+.sha3sum ...             Compute a SHA3 hash of database content
+.shell CMD ARGS...       Run CMD ARGS... in a system shell
+.show                    Show the current values for various settings
+.stats ?on|off?          Show stats or turn stats on or off
+.system CMD ARGS...      Run CMD ARGS... in a system shell
+.tables ?TABLE?          List names of tables matching LIKE pattern TABLE
+.testcase NAME           Begin redirecting output to 'testcase-out.txt'
+.timeout MS              Try opening locked tables for MS milliseconds
+.timer on|off            Turn SQL timer on or off
+.trace ?OPTIONS?         Output each SQL statement as it is run
+.vfsinfo ?AUX?           Information about the top-level VFS
+.vfslist                 List all available VFSes
+.vfsname ?AUX?           Print the name of the VFS stack
+.width NUM1 NUM2 ...     Set column widths for "column" mode
+sqlite> .headers on
+sqlite> create table contacts (name text, phone integer, email text);
+sqlite> insert into contacts (name, phone, email) values('Ike', 277493, 'ike@mail.com');
+sqlite> SELECT * FROM contacts;
+name|phone|email
+Ike|277493|ike@mail.com
+sqlite> SELECT name FROM contacts;
+name
+Ike
+sqlite> INSERT INTO contacts VALUES('Brian', 12345, 'brian@mail.com');
+sqlite> INSERT INTO contacts(name, phone) VALUES("Steve", 33848);
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|ike@mail.com
+Brian|12345|brian@mail.com
+Steve|33848|
+sqlite> INSERT INTO contacts VALUES("Avril", "+61 (0)87654321", "avril@mail.com.au");
+sqlite> SELECT * FROM contacts;
+name|phone|email
+Ike|277493|ike@mail.com
+Brian|12345|brian@mail.com
+Steve|33848|
+Avril|+61 (0)87654321|avril@mail.com.au
+sqlite> .backup testbackup
+sqlite> UPDATE contacts SET email="steve@newemail.com";
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|steve@newemail.com
+Brian|12345|steve@newemail.com
+Steve|33848|steve@newemail.com
+Avril|+61 (0)87654321|steve@newemail.com
+sqlite> .restore testbackup
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|ike@mail.com
+Brian|12345|brian@mail.com
+Steve|33848|
+Avril|+61 (0)87654321|avril@mail.com.au
+sqlite> UPDATE contacts SET email="steve@newemail.com" WHERE name = "Steve";
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|ike@mail.com
+Brian|12345|brian@mail.com
+Steve|33848|steve@newemail.com
+Avril|+61 (0)87654321|avril@mail.com.au
+sqlite> SELECT * FROM contacts WHERE name="Brian";
+name|phone|email
+Brian|12345|brian@mail.com
+sqlite> SELECT phone, email FROM contacts WHERE name="Brian";
+phone|email
+12345|brian@mail.com
+sqlite> DELETE FROM contacts WHERE phone=1234;
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|ike@mail.com
+Brian|12345|brian@mail.com
+Steve|33848|steve@newemail.com
+Avril|+61 (0)87654321|avril@mail.com.au
+sqlite> DELETE FROM contacts WHERE phone=12345;
+sqlite> SELECT * FROM contacts
+   ...> ;
+name|phone|email
+Ike|277493|ike@mail.com
+Steve|33848|steve@newemail.com
+Avril|+61 (0)87654321|avril@mail.com.au
+sqlite> .tables
+contacts
+sqlite> .schema
+CREATE TABLE contacts (name text, phone integer, email text);
+sqlite> .dump
+PRAGMA foreign_keys=OFF;
+BEGIN TRANSACTION;
+CREATE TABLE contacts (name text, phone integer, email text);
+INSERT INTO contacts VALUES('Ike',277493,'ike@mail.com');
+INSERT INTO contacts VALUES('Steve',33848,'steve@newemail.com');
+INSERT INTO contacts VALUES('Avril','+61 (0)87654321','avril@mail.com.au');
+COMMIT;
+sqlite> .exit

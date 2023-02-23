@@ -1,0 +1,1 @@
+To run, type 'npm start', if use different start command it would be 'npm run [command]'

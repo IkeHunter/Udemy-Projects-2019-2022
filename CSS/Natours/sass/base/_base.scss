@@ -1,0 +1,44 @@
+*,
+*::after,  /* all :after and :before elements */
+*::before {  /* "universal selector" resets the webpage to ensure standard settings */
+    margin: 0;
+    padding: 0;
+    box-sizing: inherit;  /* is not inherited by default, but now inherits from body */
+}
+
+html {
+    font-size: 62.5%;  /* Global font-size that rem is dependent on. 1rem == 10px. 10/16 = 62.5%
+                          percent is used instead of px so user can change default font-size */
+    
+    // phone query is not needed
+
+    @include respond(tab-land) {  // width < 1200?
+        font-size: 56.25%;  // 1rem = 9px, 9/16 = 56.25%
+    }
+    
+    @include respond(tab-port) {  // width < 900?
+        font-size: 50%;  // 1rem = 8px, 8/16 = 50%
+    }
+
+    @include respond(big-desktop) {
+        font-size: 75%;  // 1rem = 12, 12/16 = 75%
+    }
+
+    // @include respond-phone {
+    //     font-size: 50%;
+    // }
+}
+
+body { /* attributes in here allow for inheritance (unlike uni. selector) */
+    box-sizing: border-box;  /* without this borders and paddings are added to height/width of ele */
+    padding: 3rem;
+
+    @include respond(tab-port) {
+        padding: 0;
+    }
+}
+
+::selection {
+    background-color: $color-primary;
+    color: $color-white;
+}
